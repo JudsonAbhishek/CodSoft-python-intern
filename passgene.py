@@ -2,19 +2,6 @@ import random
 import string
 
 def generate_password(length=12, use_uppercase=True, use_lowercase=True, use_digits=True, use_punctuation=True):
-    """
-    Generate a random password of the specified length with optional character types.
-
-    Args:
-        length (int): Length of the password (default is 12).
-        use_uppercase (bool): Whether to include uppercase letters (default is True).
-        use_lowercase (bool): Whether to include lowercase letters (default is True).
-        use_digits (bool): Whether to include digits (default is True).
-        use_punctuation (bool): Whether to include punctuation characters (default is True).
-
-    Returns:
-        str: Generated password.
-    """
     characters = ''
     if use_uppercase:
         characters += string.ascii_uppercase
@@ -31,13 +18,32 @@ def generate_password(length=12, use_uppercase=True, use_lowercase=True, use_dig
     password = ''.join(random.choice(characters) for _ in range(length))
     return password
 
+def get_user_input(prompt, valid_responses):
+    response = input(prompt).strip().lower()
+    while response not in valid_responses:
+        print("Invalid input. Please enter one of the following:", ', '.join(valid_responses))
+        response = input(prompt).strip().lower()
+    return response
+
 def main():
+    print("Welcome to the Password Generator!")
     try:
-        length = int(input("Enter the length of the password: "))
-        password = generate_password(length)
+        length = int(input("Enter the desired length of the password: "))
+        
+        use_uppercase = get_user_input("Include uppercase letters? (yes/no): ", {'yes', 'no'}) == 'yes'
+        use_lowercase = get_user_input("Include lowercase letters? (yes/no): ", {'yes', 'no'}) == 'yes'
+        use_digits = get_user_input("Include digits? (yes/no): ", {'yes', 'no'}) == 'yes'
+        use_punctuation = get_user_input("Include symbols? (yes/no): ", {'yes', 'no'}) == 'yes'
+        
+        if not (use_uppercase or use_lowercase or use_digits or use_punctuation):
+            raise ValueError("At least one character type must be selected.")
+
+        password = generate_password(length, use_uppercase, use_lowercase, use_digits, use_punctuation)
         print("Generated password:", password)
-    except ValueError:
-        print("Invalid input. Please enter a valid integer.")
+        
+    except ValueError as e:
+        print("Error:", e)
+        print("Please try again.")
 
 if __name__ == "__main__":
     main()
