@@ -15,6 +15,9 @@ def divide(num1, num2):
 previous_output = None
 
 while True:
+    if previous_output is not None:
+        print(f"\nPrevious output: {previous_output}")
+    
     print("Please select operation -\n" \
             "1. Add\n" \
             "2. Subtract\n" \
@@ -35,6 +38,7 @@ while True:
                 print("No previous output available. Please perform a calculation first.")
                 continue
             else:
+                print(f"Your previous output is: {previous_output}")
                 number_1 = previous_output
                 number_2 = float(input("Enter second number: "))
         else:
@@ -54,9 +58,12 @@ while True:
             previous_output = divide(number_1, number_2)
             print(number_1, "/", number_2, "=", previous_output)
         elif select == 5:
-            print("Previous output is used as the first number.")
+            print(f"Using previous output ({previous_output}) as the first number.")
         else:
             print("Invalid input")
+        
+        print()  
 
     except ValueError:
         print("Invalid input. Please enter a number.")
+        print()  
